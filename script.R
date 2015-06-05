@@ -1,3 +1,5 @@
 source("http://bioconductor.org/biocLite.R")
 biocLite("pd.hugene.1.0.st.v1")
 library(pd.hugene.1.0.st.v1)
+biocLite("affy")
+library(affy)
