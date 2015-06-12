@@ -27,6 +27,12 @@ annotation(eset) #nao tem imformação
 experimentData(eset) #nao tem imformação
 abstract(eset) #nao tem imformação
 
+# pre processamento de dados
+library(genefilter)
+sds=rowSds(my_frame)#calcula o desvio padrao por linha
+m=median(sds)
+hist(sds, breaks=50, col="mistyrose")
+
 
 
 #Cancer Cells 1
