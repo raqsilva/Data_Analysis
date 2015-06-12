@@ -7,14 +7,23 @@
 
 #Diretoria dos ficheiros a analisar
 m=setwd("~/GitHub/Data_Analysis/dataset_processed")
+#Cancer Cells 1
 data1 = read.fwf(file="GSM1446286_sample_table.txt",sep=" ",header= TRUE,widths=c(8,10))
+#Stroma 1
 data2 = read.fwf(file="GSM1446287_sample_table.txt",sep=" ",header= TRUE,widths=c(8,10))
+#Total 1  
 data3 = read.fwf(file="GSM1446288_sample_table.txt",sep=" ",header= TRUE,widths=c(8,10))
+#Cancer Cells 2  
 data4 = read.fwf(file="GSM1446289_sample_table.txt",sep=" ",header= TRUE,widths=c(8,10))
+#Stroma 2
 data5 = read.fwf(file="GSM1446290_sample_table.txt",sep=" ",header= TRUE,widths=c(8,10))
+#Total 2
 data6 = read.fwf(file="GSM1446291_sample_table.txt",sep=" ",header= TRUE,widths=c(8,10))
+#Cancer Cells 3
 data7 = read.fwf(file="GSM1446292_sample_table.txt",sep=" ",header= TRUE,widths=c(8,10))
+#Stroma 3
 data8 = read.fwf(file="GSM1446293_sample_table.txt",sep=" ",header= TRUE,widths=c(8,10))
+#Total 3
 data9 = read.fwf(file="GSM1446294_sample_table.txt",sep=" ",header= TRUE,widths=c(8,10))
 
 
