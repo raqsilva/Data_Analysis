@@ -32,7 +32,8 @@ library(genefilter)
 sds=rowSds(my_frame)#calcula o desvio padrao por linha
 m=median(sds)
 hist(sds, breaks=50, col="mistyrose")
-
+sum(is.na(my_frame$GSM1446286_Can1.CEL))
+sum(is.nan(myframe$GSM1446286_Can1.CEL))
 
 
 #Cancer Cells 1
