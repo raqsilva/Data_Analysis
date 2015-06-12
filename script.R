@@ -7,10 +7,18 @@
 #biocLite("oligo")
 
 #Diretoria dos ficheiros a analisar
-m=setwd("~/GitHub/Data_Analysis/dataset")
+setwd("~/GitHub/Data_Analysis/dataset")
 
-a=ReadAffy("GSM1446294_Tot3.CEL")
-b=read.probematrix("GSM1446294_Tot3.CEL")
+library(oligo)
+celFiles <- list.celfiles()
+affyRaw <- read.celfiles(celFiles)
+eset <- rma(affyRaw)
+write.exprs(eset,file="data.txt")
+my_frame <- data.frame(exprs(eset))
+#a=ReadAffy("GSM1446294_Tot3.CEL")
+#b=read.probematrix("GSM1446294_Tot3.CEL")
+
+
 
 #Cancer Cells 1
 data1 = read.fwf(file="GSM1446286_sample_table.txt",sep=" ",header= TRUE,widths=c(8,10))
