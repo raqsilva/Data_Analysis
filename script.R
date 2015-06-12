@@ -25,8 +25,12 @@ data7 = read.fwf(file="GSM1446292_sample_table.txt",sep=" ",header= TRUE,widths=
 data8 = read.fwf(file="GSM1446293_sample_table.txt",sep=" ",header= TRUE,widths=c(8,10))
 #Total 3
 data9 = read.fwf(file="GSM1446294_sample_table.txt",sep=" ",header= TRUE,widths=c(8,10))
-
-
+#amostra1
+amostra1=data.frame(data3,data1$X,data2$X)
+#amostra2
+amostra2=data.frame(data6,data4$X,data5$X)
+#amostra3
+amostra3=data.frame(data9,data7$X,data8$X)
 #media de valores
 mean(data$X) 
 
