@@ -27,10 +27,14 @@ data8 = read.fwf(file="GSM1446293_sample_table.txt",sep=" ",header= TRUE,widths=
 data9 = read.fwf(file="GSM1446294_sample_table.txt",sep=" ",header= TRUE,widths=c(8,10))
 #amostra1
 amostra1=data.frame(data3,data1$X,data2$X)
+colnames(amostra1) <- c("ID_REF.VALUE  ", "Total 1 ","Cancer Cells 1","Stroma 1")
+
 #amostra2
 amostra2=data.frame(data6,data4$X,data5$X)
+colnames(amostra2) <- c("ID_REF.VALUE  ", "Total 2 ","Cancer Cells 2","Stroma 2")
 #amostra3
 amostra3=data.frame(data9,data7$X,data8$X)
+colnames(amostra3) <- c("ID_REF.VALUE  ", "Total 3 ","Cancer Cells 3","Stroma 3")
 #media de valores
 mean(data$X) 
 
@@ -47,7 +51,7 @@ summary(data$X) #resumo de todos os atributos
 
 
 # Distribuicao normal do valor  de pelo gene
-dens = density(data$X)
+dens = density(amostra1)
 m = mean(data$X)
 hist(data$X,probability=T,col=gray(.9),main="Analysis of compartment-specific gene expression in breast cancer tumors",xlab="Value")
 lines(dens, col = "blue")
