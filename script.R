@@ -13,10 +13,19 @@ library(oligo)
 celFiles <- list.celfiles()
 affyRaw <- read.celfiles(celFiles)
 eset <- rma(affyRaw)
+# save the data to an output file (Data will be log2 transformed and normalized)
 write.exprs(eset,file="data.txt")
 my_frame <- data.frame(exprs(eset))
-#a=ReadAffy("GSM1446294_Tot3.CEL")
-#b=read.probematrix("GSM1446294_Tot3.CEL")
+View(my_frame)
+dim(my_frame)
+class(my_frame)
+featureNames(eset)[1:5]
+sampleNames(eset)[1:5]
+varMetadata(eset) # nao tem descrição das amostras
+phenoData(eset) #nao tem imformação
+annotation(eset) #nao tem imformação
+experimentData(eset) #nao tem imformação
+abstract(eset) #nao tem imformação
 
 
 
