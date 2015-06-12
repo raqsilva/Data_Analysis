@@ -30,10 +30,15 @@ abstract(eset) #nao tem imformação
 # pre processamento de dados
 library(genefilter)
 sds=rowSds(my_frame)#calcula o desvio padrao por linha
+sds[1:15]
 m=median(sds)
-hist(sds, breaks=50, col="mistyrose")
+m
+mean(sds)
+hist(sds, breaks=20, col="mistyrose")
 sum(is.na(my_frame$GSM1446286_Can1.CEL))
-sum(is.nan(myframe$GSM1446286_Can1.CEL))
+sum(is.nan(my_frame$GSM1446286_Can1.CEL))
+abline(v=m, col="blue", lwd=4, lty=2)
+abline(v=m*3, col="red", lwd=4, lty=2)
 
 
 
