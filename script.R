@@ -8,6 +8,16 @@
 #Diretoria dos ficheiros a analisar
 m=setwd("~/GitHub/Data_Analysis/dataset_processed")
 data1 = read.fwf(file="GSM1446286_sample_table.txt",sep=" ",header= TRUE,widths=c(8,10))
+data2 = read.fwf(file="GSM1446287_sample_table.txt",sep=" ",header= TRUE,widths=c(8,10))
+data3 = read.fwf(file="GSM1446288_sample_table.txt",sep=" ",header= TRUE,widths=c(8,10))
+data4 = read.fwf(file="GSM1446289_sample_table.txt",sep=" ",header= TRUE,widths=c(8,10))
+data5 = read.fwf(file="GSM1446290_sample_table.txt",sep=" ",header= TRUE,widths=c(8,10))
+data6 = read.fwf(file="GSM1446291_sample_table.txt",sep=" ",header= TRUE,widths=c(8,10))
+data7 = read.fwf(file="GSM1446292_sample_table.txt",sep=" ",header= TRUE,widths=c(8,10))
+data8 = read.fwf(file="GSM1446293_sample_table.txt",sep=" ",header= TRUE,widths=c(8,10))
+data9 = read.fwf(file="GSM1446294_sample_table.txt",sep=" ",header= TRUE,widths=c(8,10))
+
+
 #media de valores
 mean(data$X) 
 
