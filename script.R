@@ -1,12 +1,17 @@
-# #source("http://bioconductor.org/biocLite.R")
-# biocLite("pd.hugene.1.0.st.v1")
-# library(pd.hugene.1.0.st.v1)
-# # biocLite("affy")
-# #library(affy)
-# data(pd.hugene.1.0.st.v1)
+#source("http://bioconductor.org/biocLite.R")
+#biocLite("pd.hugene.1.0.st.v1")
+#library(pd.hugene.1.0.st.v1)
+#biocLite("affy")
+#library(affy)
+#data(pd.hugene.1.0.st.v1)
+#biocLite("oligo")
 
 #Diretoria dos ficheiros a analisar
-m=setwd("~/GitHub/Data_Analysis/dataset_processed")
+m=setwd("~/GitHub/Data_Analysis/dataset")
+
+a=ReadAffy("GSM1446294_Tot3.CEL")
+b=read.probematrix("GSM1446294_Tot3.CEL")
+
 #Cancer Cells 1
 data1 = read.fwf(file="GSM1446286_sample_table.txt",sep=" ",header= TRUE,widths=c(8,10))
 #Stroma 1
