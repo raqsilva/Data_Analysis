@@ -11,6 +11,8 @@ setwd("~/GitHub/Data_Analysis/dataset")
 library(oligo)
 celFiles <- list.celfiles()
 affyRaw <- read.celfiles(celFiles)
+
+#The Robust Multichip Average (RMA) 
 eset <- rma(affyRaw)
 # save the data to an output file (Data will be log2 transformed and normalized)
 write.exprs(eset,file="data.txt")
@@ -26,6 +28,8 @@ annotation(eset) #"pd.hugene.1.0.st.v1"
 experimentData(eset) #nao tem imformação
 abstract(eset) #nao tem imformação
 
+
+# The package contains an SQLite database. This database is accessible through a connection
 conn <- db(pd.hugene.1.0.st.v1)
 dbListTables(conn)
 dbListFields(conn, 'featureSet')
