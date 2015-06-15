@@ -1,9 +1,8 @@
-#source("http://bioconductor.org/biocLite.R")
+source("http://bioconductor.org/biocLite.R")
 #biocLite("pd.hugene.1.0.st.v1")
-#library(pd.hugene.1.0.st.v1)
-#biocLite("affy")
-#library(affy)
-#data(pd.hugene.1.0.st.v1)
+library(pd.hugene.1.0.st.v1)
+#biocLite("affy") # do not load this library, only use oligo for our case
+#library(affy) # do not load this library, only use oligo for our case
 #biocLite("oligo")
 
 #Diretoria dos ficheiros a analisar
@@ -23,9 +22,20 @@ featureNames(eset)[1:5]
 sampleNames(eset)[1:5]
 varMetadata(eset) # nao tem descrição das amostras
 phenoData(eset) #nao tem imformação
-annotation(eset) #nao tem imformação
+annotation(eset) #"pd.hugene.1.0.st.v1"
 experimentData(eset) #nao tem imformação
 abstract(eset) #nao tem imformação
+
+conn <- db(pd.hugene.1.0.st.v1)
+dbListTables(conn)
+dbListFields(conn, 'featureSet')
+dbListFields(conn, 'pmfeature')
+sql <- 'SELECT * FROM pmfeature INNER JOIN featureSet USING(fsetid)'
+probeInfo <- dbGetQuery(conn, sql)
+probeInfo[1:10, 1:3]
+head(probeInfo)
+
+
 
 # pre processamento de dados
 library(genefilter)
