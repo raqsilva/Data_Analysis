@@ -86,9 +86,11 @@ frame_var_filter <- data.frame(exprs(filter))
 
 
 ## Expressão diferencial
-tt = rowttests(eset)
-
-
+require(Biobase)
+object<-new("ExpressionSet", exprs=as.matrix(new_frame))
+object
+tt = rowttests(object)
+tt
 
 
 
