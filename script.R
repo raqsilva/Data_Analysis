@@ -80,9 +80,13 @@ min(minimos)
 vl=maximos/minimos>2
 new_frame2=my_frame[vl,]
 
+## keep top 50 percent
 filter=varFilter(eset, var.func=IQR, var.cutoff=0.5, filterByQuantile=TRUE)
 frame_var_filter <- data.frame(exprs(filter))
 
+
+## Expressão diferencial
+tt = rowttests(eset)
 
 
 
