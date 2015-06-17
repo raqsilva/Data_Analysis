@@ -40,7 +40,6 @@ probeInfo[1:10, 1:3]
 head(probeInfo)
 
 
-
 # pre processamento de dados
 library(genefilter)
 sds=rowSds(my_frame)#calcula o desvio padrao por linha
@@ -51,6 +50,23 @@ mean(sds)
 hist(sds, breaks=20, col="mistyrose")
 sum(is.na(my_frame$GSM1446286_Can1.CEL))
 sum(is.nan(my_frame$GSM1446286_Can1.CEL))
+sum(is.na(my_frame$GSM1446287_Str1.CEL))
+sum(is.nan(my_frame$GSM1446287_Str1.CEL))
+sum(is.na(my_frame$GSM1446288_Tot1.CEL))
+sum(is.nan(my_frame$GSM1446288_Tot1.CEL))
+sum(is.na(my_frame$GSM1446289_Can2.CEL))
+sum(is.nan(my_frame$GSM1446289_Can2.CEL))
+sum(is.na(my_frame$GSM1446290_Str2.CEL))
+sum(is.nan(my_frame$GSM1446290_Str2.CEL))
+sum(is.na(my_frame$GSM1446291_Tot2.CEL))
+sum(is.nan(my_frame$GSM1446291_Tot2.CEL))
+sum(is.na(my_frame$GSM1446292_Can3.CEL))
+sum(is.nan(my_frame$GSM1446292_Can3.CEL))
+sum(is.na(my_frame$GSM1446293_Str3.CEL))
+sum(is.nan(my_frame$GSM1446293_Str3.CEL))
+sum(is.na(my_frame$GSM1446294_Tot3.CEL))
+sum(is.nan(my_frame$GSM1446294_Tot3.CEL))
+  						
 abline(v=m, col="blue", lwd=4, lty=2)
 abline(v=m*3, col="red", lwd=4, lty=2)
 
