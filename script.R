@@ -74,8 +74,10 @@ new_frame=my_frame[sds >= 2*m, ]
 
 maximos=apply(my_frame,1,max)
 maximos
+#max value of gene expression 
 max(maximos)
 minimos=apply(my_frame,1,min)
+#min value of gene expression 
 min(minimos)
 vl=maximos/minimos>2
 new_frame2=my_frame[vl,]
@@ -87,36 +89,35 @@ frame_var_filter <- data.frame(exprs(filter))
 
 ## Expressão diferencial
 require(Biobase)
-object<-new("ExpressionSet", exprs=as.matrix(new_frame))
+object<-new("ExpressionSet", exprs=as.matrix(new_frame2))
 object
 tt = rowttests(object)
 tt
+#New dataframe ordered by column p value, ascending
+pvalueorder = tt[order(tt$p.value),]
 
 
+#cluster
+eucD = dist(exprs(object[1:20])) 
+cl.hier <- hclust(eucD)
+plot(cl.hier) 
 
-# #possivelmente lixo
-# #media de valores
-# mean(data$X) 
+cl.hier <- hclust(eucD, method="single")
+plot(cl.hier)
+
+cl.hier <- hclust(eucD, method="average")
+plot(cl.hier)
+
+
+heatmap(exprs(object[1:20]), labCol = F)
+
+# #
+# library(limma)
+# design = model.matrix(~new_frame)
 # 
+# fit = lmFit(new_frame$,design)
+# fit2 = eBayes(fit)
+# diff = topTable(fit2, coef=2, 10)
+# diff
 # 
-# 
-# class(data) #classe do ficheiro
-# typeof(data) #tipo do dataset
-# nrow(data) #numero de linhas
-# ncol(data) #numero de colunas
-# sapply(data, class) #verificar a classe de cada coluna
-# sapply(data, typeof) #verificar o tipo de valor que cada coluna tem
-# sum(is.na(data)) #verificar se tem numeros omissos - Nao tem valores omissos
-# summary(data$X) #resumo de todos os atributos
-# 
-# 
-# # Distribuicao normal do valor  de pelo gene
-# dens = density(amostra1)
-# m = mean(data$X)
-# hist(data$X,probability=T,col=gray(.9),main="Analysis of compartment-specific gene expression in breast cancer tumors",xlab="Value")
-# lines(dens, col = "blue")
-# abline(v=m, col = "green")
-# curve(dnorm(x,mean(data$X),sd(data$X)),add=T,col="red")
-# 
-# 
-# 
+
