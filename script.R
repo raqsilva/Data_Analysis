@@ -70,7 +70,11 @@ sum(is.nan(my_frame$GSM1446294_Tot3.CEL))
 abline(v=m, col="blue", lwd=4, lty=2)
 abline(v=m*3, col="red", lwd=4, lty=2)
 
-
+maximos=apply(my_frame,1,max)
+maximos
+max(maximos)
+minimos=apply(my_frame,1,min)
+min(minimos)
 
 
 # #possivelmente lixo
