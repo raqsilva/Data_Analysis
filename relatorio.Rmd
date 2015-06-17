@@ -1,0 +1,62 @@
+---
+output: html_document
+---
+# Analysis of compartment-specific gene expression in breast cancer tumors
+## Introdução
+O cancro leva a um crescimento anormal das células devido a mutações em genes, este crescimento pode ser visto como a transcrição do gene ou seja, irá haver mais produção de mRNA, quantificado como o nível de expressão genética.
+Os nossos dados correspondem a 3 amostras dos 3 compartimentos, somando 9 amostras para cada gene. Os tumores de mama que são considerados como "triplo negativo" correspondem a 20% dos cancros mamários, sendo que estes não contêm recetores de estrogénio, progesterona ou HER2.
+
+## Carregar Dados
+A libraria usada para os nossos dados foi a "pd.hugene.1.0.st.v1".
+De modo a carregar os dados que se encontravam em formato .CEL foi necessário recorrer à libraria "oligo" que seguidamente procedemos à sua normalização via Robust Multichip Average (RMA) que nos irá dar os nossos dados de expressão genética. Estes dados já foram transformados usando log2 e normalizados.
+Para um melhor tratamento dos dados foi retirado a informação destes dados de expressão e colocados num data frame com 33297 linhas (genes) por 9 colunas que correspondem a 3 amostras para 3 localizações por cada amostra, nomeadamente o estroma, a célula cancerígena e o tecido tumoral.
+
+## Filtros
+A libraria "genefilter" irá ser usada para selecionar apenas os genes que mais interessam para o nosso caso.
+Decidimos filtrar as amostras pelo valor do desvio padrão em que os valores do data frame cujo desvio padrão for superior ou igual a 2 vezes a mediana.
+O que significa que os valores têm maior variabilidade isto é, há uma maior diferença entre eles o que causa um certo interesse nestes genes, pois os genes normais produzem praticamente a mesma quantidade de mRNA ao longo do tempo, mantendo a sua actividade normal.
+
+## Expressão Diferencial
+Foi realizado um t-test para cada gene, em que um baixo p-value é visto como um gene com expressão genética, em que há maior variação entre as amostras, há uma diferença muito grande entre os difenretes valores. Para valores maiores de p-value, a diferença entre os níveis de expressão genética do gene nos vários compartimentos é quase nula.
+
+
+
+* pdf_document
+* word_document
+* md_document
+* ...
+
+Cada formato pode ser visto em melhor detalhe [aqui](http://rmarkdown.rstudio.com), em __Formats__.
+
+### Texto Bonito
+Pode-se usar _itálico_ e __negrito__ e escrever equações semelhante ao latex com $y=\frac{1}{n}$
+
+> Mais interessante, código R e tabelas
+
+```
+Bloco de código
+Continuação
+```
+
+First Header | Second Header
+-------------|--------------
+Content Cell | Content Cell
+Content Cell | Content Cell
+
+Para usar imagens da net ou em disco:
+
+![imagem](http://cran.r-project.org/Rlogo.jpg)
+
+## Executar código R
+Por exemplo, a raíz quadrada de 9 é `r sqrt(9)`.
+Para manter a mesma directoria em todos os blocos de código basta colocar no bloco de código inicial:
+```
+setwd("/caminho/para/a/pasta")
+opts_knit$set(root.dir=getwd())
+```
+Exemplo de bloco de código:
+```{r}
+x=1:10
+y=21:30
+plot(x, y)
+```
