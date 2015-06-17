@@ -77,6 +77,8 @@ maximos
 max(maximos)
 minimos=apply(my_frame,1,min)
 min(minimos)
+vl=maximos/minimos>2
+new_frame2=my_frame[vl,]
 
 
 # #possivelmente lixo
