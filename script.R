@@ -1,44 +1,34 @@
 'Trabalho ECBD ' 
 
-
-
 source("http://bioconductor.org/biocLite.R")
 #biocLite("pd.hugene.1.0.st.v1")
 library(pd.hugene.1.0.st.v1)
 #Diretoria dos ficheiros a analisar
 setwd("~/GitHub/Data_Analysis/dataset")
-########### 1- Carregamento dos Dados ############
+### 1- Carregamento dos Dados ####
 library(oligo)
 celFiles <- list.celfiles()
 affyRaw <- read.celfiles(celFiles)
 #The Robust Multichip Average (RMA) 
-eset <- rma(affyRaw)
-# save the data to an output file (Data will be log2 transformed and normalized)
+eset <- rma(affyRaw)#normalização dos dados
+# Guarda os dados em txt,os dados são transformados em log2 e normalizados
 write.exprs(eset,file="data.txt")
 my_frame <- data.frame(exprs(eset))
+#ver data framme
 View(my_frame)
 dim(my_frame)
-class(my_frame)
-featureNames(eset)[1:5]
-sampleNames(eset)[1:5]
+class(my_frame)#33297     9
+featureNames(eset)[1:5]# "7892501" "7892502" "7892503" "7892504" "7892505"
+sampleNames(eset)[1:5]# "GSM1446286_Can1.CEL" "GSM1446287_Str1.CEL" "GSM1446288_Tot1.CEL" "GSM1446289_Can2.CEL" "GSM1446290_Str2.CEL"
 varMetadata(eset) # nao tem descrição das amostras
-phenoData(eset) #nao tem imformação
+phenoData(eset) #nao tem informação
 annotation(eset) #"pd.hugene.1.0.st.v1"
-experimentData(eset) #nao tem imformação
-abstract(eset) #nao tem imformação
+experimentData(eset) #nao tem informação
+abstract(eset) #nao tem informação
 
 
-# The package contains an SQLite database. This database is accessible through a connection
-conn <- db(pd.hugene.1.0.st.v1)
-dbListTables(conn)
-dbListFields(conn, 'featureSet')
-dbListFields(conn, 'pmfeature')
-sql <- 'SELECT * FROM pmfeature INNER JOIN featureSet USING(fsetid)'
-probeInfo <- dbGetQuery(conn, sql)
-probeInfo[1:10, 1:3]
-head(probeInfo)
 
-########### 2- Pre-processamento dos Dados ############
+###2- Pre-processamento dos Dados ###
 #Não temos valores omissos nos dados em analise.
 sum(is.na(my_frame$GSM1446286_Can1.CEL))
 sum(is.nan(my_frame$GSM1446286_Can1.CEL))
@@ -62,25 +52,26 @@ sum(is.nan(my_frame$GSM1446294_Tot3.CEL))
 # Normalização, Background Corrections, Pm correction
 library(genefilter)
 sds=rowSds(my_frame)#calcula o desvio padrao por linha
-sds[1:15]
-m=median(sds)
-m
-mean(sds)
-hist(sds, breaks=20, col="mistyrose")  						
-abline(v=m, col="blue", lwd=4, lty=2)
-abline(v=m*2, col="red", lwd=4, lty=2)
+sds[1:15] #Ver os primeiros 15 desvios padroes
+m=median(sds)#mediana de desvios de padroes 0.2639786 
+m 
+mean(sds)#media de desvios de padroes 0.2639786 
+hist(sds, breaks=20, col="mistyrose") # histograma 						
+abline(v=m, col="blue", lwd=4, lty=2)#mediana 
+abline(v=m*2, col="red", lwd=4, lty=2)#limite superior 2 vezes a mediana
 new_frame=my_frame[sds >= 2*m, ]
 
 
-maximos=apply(my_frame,1,max)
+maximos=apply(my_frame,1,max)# maximos do valor de expressao dos genes
 maximos
-#max value of gene expression 
+minimos=apply(my_frame,1,min)# minimo do valor de expressao dos genes
+#maximo valor de gene expression
 max(maximos)
-minimos=apply(my_frame,1,min)
-#min value of gene expression 
+#minimo valor de gene expression 
 min(minimos)
+
 vl=maximos/minimos>2
-new_frame2=my_frame[vl,]
+new_frame2=my_frame[vl,]#Data frame com dados filtrados
 
 ## keep top 50 percent
 filter=varFilter(eset, var.func=IQR, var.cutoff=0.5, filterByQuantile=TRUE)
@@ -93,14 +84,16 @@ object<-new("ExpressionSet", exprs=as.matrix(new_frame2))
 object
 tt = rowttests(object)
 tt
-#New dataframe ordered by column p value, ascending
-pvalueorder = tt[order(tt$p.value),]
+#Novo dataframe ordenado pela coluna de p value
+pvalueorder= tt[order(tt$p.value),]
+pvalueorder$p.value[1:20]# primeiros 20 resultados com menor p value
 
 
-#cluster
+### Clustering ### 
 eucD = dist(exprs(object[1:20])) 
 cl.hier <- hclust(eucD)
 plot(cl.hier) 
+
 
 cl.hier <- hclust(eucD, method="single")
 plot(cl.hier)
@@ -108,9 +101,9 @@ plot(cl.hier)
 cl.hier <- hclust(eucD, method="average")
 plot(cl.hier)
 
-
+#heatmap
 heatmap(exprs(object[1:20]), labCol = F)
-
+#kmeans
 km = kmeans(exprs(object[1:20]), 3) 
 names(km)
 km$cluster
