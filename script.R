@@ -90,20 +90,9 @@ tt
 pvalueorder= tt[order(tt$p.value),]
 pvalueorder$p.value[1:20]# primeiros 20 resultados com menor p value
 
-
-#nao da
-library(limma)
-design = model.matrix(~new_frame2$GSM1446286_Can1.CEL )
-fit = lmFit(new_frame2,design)
-fit2 = eBayes(fit)
-diff = topTable(fit2, coef=2, 10)
-diff
-
-
+dim(object)
 ### Clustering ### 
-rank= pvalueorder$pvalue
-p20 = rank[1:20]
-eucD = dist(exprs(new_frame2[1:20])) 
+eucD = dist(exprs(object[1:20])) 
 cl.hier <- hclust(eucD)
 plot(cl.hier) 
 
