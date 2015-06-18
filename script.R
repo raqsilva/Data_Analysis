@@ -5,15 +5,12 @@
 source("http://bioconductor.org/biocLite.R")
 #biocLite("pd.hugene.1.0.st.v1")
 library(pd.hugene.1.0.st.v1)
-
 #Diretoria dos ficheiros a analisar
-
 setwd("~/GitHub/Data_Analysis/dataset")
-
+########### 1- Carregamento dos Dados ############
 library(oligo)
 celFiles <- list.celfiles()
 affyRaw <- read.celfiles(celFiles)
-
 #The Robust Multichip Average (RMA) 
 eset <- rma(affyRaw)
 # save the data to an output file (Data will be log2 transformed and normalized)
@@ -41,15 +38,8 @@ probeInfo <- dbGetQuery(conn, sql)
 probeInfo[1:10, 1:3]
 head(probeInfo)
 
-
-# pre processamento de dados
-library(genefilter)
-sds=rowSds(my_frame)#calcula o desvio padrao por linha
-sds[1:15]
-m=median(sds)
-m
-mean(sds)
-hist(sds, breaks=20, col="mistyrose")
+########### 2- Pre-processamento dos Dados ############
+#Não temos valores omissos nos dados em analise.
 sum(is.na(my_frame$GSM1446286_Can1.CEL))
 sum(is.nan(my_frame$GSM1446286_Can1.CEL))
 sum(is.na(my_frame$GSM1446287_Str1.CEL))
@@ -68,7 +58,15 @@ sum(is.na(my_frame$GSM1446293_Str3.CEL))
 sum(is.nan(my_frame$GSM1446293_Str3.CEL))
 sum(is.na(my_frame$GSM1446294_Tot3.CEL))
 sum(is.nan(my_frame$GSM1446294_Tot3.CEL))
-  						
+
+# Normalização, Background Corrections, Pm correction
+library(genefilter)
+sds=rowSds(my_frame)#calcula o desvio padrao por linha
+sds[1:15]
+m=median(sds)
+m
+mean(sds)
+hist(sds, breaks=20, col="mistyrose")  						
 abline(v=m, col="blue", lwd=4, lty=2)
 abline(v=m*2, col="red", lwd=4, lty=2)
 new_frame=my_frame[sds >= 2*m, ]
