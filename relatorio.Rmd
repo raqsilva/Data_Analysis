@@ -127,8 +127,8 @@ pvalueorder$p.value[1:20]# primeiros 20 resultados com menor p value
 
 
 ## Clustering
-Para visualizar genes que são próximos em termos de nível de expressão, iremos realizar um clustering (agrupamento) dos dados, caso os genes estejam próximos podem estar relacionados funcionalmente.
-
+Para visualizar genes que são próximos em termos de nível de expressão, iremos realizar um clustering (agrupamento) dos dados, caso os genes estejam próximos podem estar relacionados funcionalmente podendo, também, ter a mesma via metabólica.
+No primeiro cluster hierarquico temos 3 conjuntos de genes que são mais próximos.
 
 ```{r, message=FALSE, warning=FALSE}
 eucD = dist(exprs(object[1:20])) 
@@ -139,6 +139,24 @@ plot(cl.hier)
 cl.hier <- hclust(eucD, method="average")
 plot(cl.hier)
 ```
+
+## Heatmap
+É uma forma de representar dados matriciais onde cores de cada délula representam uma escala de valores.
+O heatmap criado em R inclui o clustering hierarquico realizado quer ao nível das linhas quer ao nível das colunas.
+
+```{r, message=FALSE, warning=FALSE}
+heatmap(exprs(object[1:20]), labCol = F)
+```
+
+
+O clustering k-means indica-nos o cluster onde cada gene está alojado.
+```{r, message=FALSE, warning=FALSE}
+#kmeans
+km = kmeans(exprs(object[1:20]), 3) 
+names(km)
+km$cluster
+```
+
 
 
 
