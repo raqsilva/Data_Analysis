@@ -4,59 +4,141 @@ output: html_document
 # Analysis of compartment-specific gene expression in breast cancer tumors
 ## Introdução
 O cancro leva a um crescimento anormal das células devido a mutações em genes, este crescimento pode ser visto como a transcrição do gene ou seja, irá haver mais produção de mRNA, quantificado como o nível de expressão genética.
-Os nossos dados correspondem a 3 amostras dos 3 compartimentos, somando 9 amostras para cada gene. Os tumores de mama que são considerados como "triplo negativo" correspondem a 20% dos cancros mamários, sendo que estes não contêm recetores de estrogénio, progesterona ou HER2.
+Os nossos dados correspondem a 3 amostras dos 3 compartimentos, somando 9 amostras para cada gene. Os tumores de mama que são considerados como "triplo negativo" correspondem a 20% dos cancros mamários, sendo que estes não contêm recetores de estrogénio (núcleo), progesterona (núcleo) ou HER2 (membrana/citoplasma).
+
 
 ## Carregar Dados
 A libraria usada para os nossos dados foi a "pd.hugene.1.0.st.v1".
-De modo a carregar os dados que se encontravam em formato .CEL foi necessário recorrer à libraria "oligo" que seguidamente procedemos à sua normalização via Robust Multichip Average (RMA) que nos irá dar os nossos dados de expressão genética. Estes dados já foram transformados usando log2 e normalizados.
+De modo a carregar os dados que se encontravam em formato .CEL foi necessário recorrer à livraria "oligo" que seguidamente procedemos à sua normalização via Robust Multichip Average (RMA) que nos irá dar os nossos dados de expressão genética. Estes dados já foram transformados usando log2 e normalizados.
+
+```{r, message=FALSE, warning=FALSE}
+library(pd.hugene.1.0.st.v1)
+library(oligo)
+setwd("~/GitHub/Data_Analysis/dataset")
+celFiles <- list.celfiles()
+affyRaw <- read.celfiles(celFiles)
+eset <- rma(affyRaw)#normalização dos dados
+```
+
 Para um melhor tratamento dos dados foi retirado a informação destes dados de expressão e colocados num data frame com 33297 linhas (genes) por 9 colunas que correspondem a 3 amostras para 3 localizações por cada amostra, nomeadamente o estroma, a célula cancerígena e o tecido tumoral.
 
+```{r, message=FALSE, warning=FALSE}
+# Guarda os dados em txt,os dados são transformados em log2 e normalizados
+write.exprs(eset,file="data.txt")
+my_frame <- data.frame(exprs(eset))
+#ver data framme
+View(my_frame)
+dim(my_frame)
+class(my_frame)
+featureNames(eset)[1:5]
+sampleNames(eset)[1:5]
+annotation(eset)
+```
+
+O nosso data set de expressão genética não apresenta informações sobre atributos das amostras ou mesmo sobre a experiência realizada.
+
+```
+varMetadata(eset) # nao tem descrição das amostras
+phenoData(eset) #nao tem informação
+experimentData(eset) #nao tem informação
+abstract(eset) #nao tem informação
+```
+
+Procedemos à verificação dos dados para verificar se existiam valores omissos ou elementos que não fossem números. Portanto a soma deste tipo de valores foi nulo em todas as colunas, isto é não existem valores omissos ou não números no nosso dataset.
+
+```
+sum(is.na(my_frame$GSM1446286_Can1.CEL))
+sum(is.nan(my_frame$GSM1446286_Can1.CEL))
+sum(is.na(my_frame$GSM1446287_Str1.CEL))
+sum(is.nan(my_frame$GSM1446287_Str1.CEL))
+sum(is.na(my_frame$GSM1446288_Tot1.CEL))
+sum(is.nan(my_frame$GSM1446288_Tot1.CEL))
+sum(is.na(my_frame$GSM1446289_Can2.CEL))
+sum(is.nan(my_frame$GSM1446289_Can2.CEL))
+sum(is.na(my_frame$GSM1446290_Str2.CEL))
+sum(is.nan(my_frame$GSM1446290_Str2.CEL))
+sum(is.na(my_frame$GSM1446291_Tot2.CEL))
+sum(is.nan(my_frame$GSM1446291_Tot2.CEL))
+sum(is.na(my_frame$GSM1446292_Can3.CEL))
+sum(is.nan(my_frame$GSM1446292_Can3.CEL))
+sum(is.na(my_frame$GSM1446293_Str3.CEL))
+sum(is.nan(my_frame$GSM1446293_Str3.CEL))
+sum(is.na(my_frame$GSM1446294_Tot3.CEL))
+sum(is.nan(my_frame$GSM1446294_Tot3.CEL))
+```
+
+
 ## Filtros
-A libraria "genefilter" irá ser usada para selecionar apenas os genes que mais interessam para o nosso caso.
+A livraria "genefilter" irá ser usada para selecionar apenas os genes que mais interessam para o nosso caso.
 Decidimos filtrar as amostras pelo valor do desvio padrão em que os valores do data frame cujo desvio padrão for superior ou igual a 2 vezes a mediana.
 O que significa que os valores têm maior variabilidade isto é, há uma maior diferença entre eles o que causa um certo interesse nestes genes, pois os genes normais produzem praticamente a mesma quantidade de mRNA ao longo do tempo, mantendo a sua actividade normal.
+
+``` {r, message=FALSE, warning=FALSE}
+library(genefilter)
+sds=rowSds(my_frame)#calcula o desvio padrao por linha
+sds[1:15] #Ver os primeiros 15 desvios padroes
+m=median(sds)#mediana de desvios de padroes 
+m 
+mean(sds)
+hist(sds, breaks=20, col="mistyrose")  					
+abline(v=m, col="blue", lwd=4, lty=2)
+abline(v=m*2, col="red", lwd=4, lty=2)
+new_frame=my_frame[sds >= 2*m, ]
+```
+
+Os genes com pouca variação nas diversas amostras não são biologicamente relevantes.
+Realizamos outro tipo de filtragem em que só seriam considerados os genes em que o valor dado pela divisão entre o valor máximo e mínimo fosse superior a 2 isto é, a diferença entre o máximo e o mínimo irá ser elevado.
+
+```{r, message=FALSE, warning=FALSE}
+maximos=apply(my_frame,1,max)# maximos do valor de expressao dos genes
+minimos=apply(my_frame,1,min)# minimo do valor de expressao dos genes
+#maximo valor de gene expression
+max(maximos)
+#minimo valor de gene expression 
+min(minimos)
+
+vl=maximos/minimos>2
+new_frame2=my_frame[vl,]#Data frame filtrado com  genes cujo rácio do máximo valor sobre o mínimo valor de expressão seja superior a 2
+
+```
+
+Uma filtragem diferente seria através do quantis, mas não iremos utilizar este dataframe, apenas será utilizado o __new_frame2__ para os processos seguintes.
+
+```
+## keep top 50 percent
+filter=varFilter(eset, var.func=IQR, var.cutoff=0.5, filterByQuantile=TRUE)
+frame_var_filter <- data.frame(exprs(filter))
+```
+
 
 ## Expressão Diferencial
 Foi realizado um t-test para cada gene, em que um baixo p-value é visto como um gene com expressão genética, em que há maior variação entre as amostras, há uma diferença muito grande entre os difenretes valores. Para valores maiores de p-value, a diferença entre os níveis de expressão genética do gene nos vários compartimentos é quase nula.
 
-
-
-* pdf_document
-* word_document
-* md_document
-* ...
-
-Cada formato pode ser visto em melhor detalhe [aqui](http://rmarkdown.rstudio.com), em __Formats__.
-
-### Texto Bonito
-Pode-se usar _itálico_ e __negrito__ e escrever equações semelhante ao latex com $y=\frac{1}{n}$
-
-> Mais interessante, código R e tabelas
+```{r, message=FALSE, warning=FALSE}
+require(Biobase)
+object<-new("ExpressionSet", exprs=as.matrix(new_frame2))# transformar o newframe2 em  expression set
+object
+tt = rowttests(object)#Realiza os t-tests e verificar os p-values
+#Novo dataframe ordenado pela coluna de p value
+pvalueorder= tt[order(tt$p.value),]
+pvalueorder$p.value[1:20]# primeiros 20 resultados com menor p value
 
 ```
-Bloco de código
-Continuação
+
+
+## Clustering
+Para visualizar genes que são próximos em termos de nível de expressão, iremos realizar um clustering (agrupamento) dos dados, caso os genes estejam próximos podem estar relacionados funcionalmente.
+
+
+```{r, message=FALSE, warning=FALSE}
+eucD = dist(exprs(object[1:20])) 
+cl.hier <- hclust(eucD)
+plot(cl.hier) 
+cl.hier <- hclust(eucD, method="single")
+plot(cl.hier)
+cl.hier <- hclust(eucD, method="average")
+plot(cl.hier)
 ```
 
-First Header | Second Header
--------------|--------------
-Content Cell | Content Cell
-Content Cell | Content Cell
 
-Para usar imagens da net ou em disco:
 
-![imagem](http://cran.r-project.org/Rlogo.jpg)
-
-## Executar código R
-Por exemplo, a raíz quadrada de 9 é `r sqrt(9)`.
-Para manter a mesma directoria em todos os blocos de código basta colocar no bloco de código inicial:
-```
-setwd("/caminho/para/a/pasta")
-opts_knit$set(root.dir=getwd())
-```
-Exemplo de bloco de código:
-```{r}
-x=1:10
-y=21:30
-plot(x, y)
-```
