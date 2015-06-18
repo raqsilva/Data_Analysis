@@ -71,7 +71,8 @@ max(maximos)
 min(minimos)
 
 vl=maximos/minimos>2
-new_frame2=my_frame[vl,]#Data frame com dados filtrados
+new_frame2=my_frame[vl,]#Data frame filtrado com  genes cujo rácio do máximo valor sobre o mínimo valor de expressão seja superior a 2
+
 
 ## keep top 50 percent
 filter=varFilter(eset, var.func=IQR, var.cutoff=0.5, filterByQuantile=TRUE)
@@ -80,17 +81,29 @@ frame_var_filter <- data.frame(exprs(filter))
 
 ## Expressão diferencial
 require(Biobase)
-object<-new("ExpressionSet", exprs=as.matrix(new_frame2))
+object<-new("ExpressionSet", exprs=as.matrix(new_frame2))# transformar o newframe2 em  expression set
 object
-tt = rowttests(object)
+tt = rowttests(object)#Realiza os t-tests e verificar os p-values
+
 tt
 #Novo dataframe ordenado pela coluna de p value
 pvalueorder= tt[order(tt$p.value),]
 pvalueorder$p.value[1:20]# primeiros 20 resultados com menor p value
 
 
+#nao da
+library(limma)
+design = model.matrix(~new_frame2$GSM1446286_Can1.CEL )
+fit = lmFit(new_frame2,design)
+fit2 = eBayes(fit)
+diff = topTable(fit2, coef=2, 10)
+diff
+
+
 ### Clustering ### 
-eucD = dist(exprs(object[1:20])) 
+rank= pvalueorder$pvalue
+p20 = rank[1:20]
+eucD = dist(exprs(new_frame2[1:20])) 
 cl.hier <- hclust(eucD)
 plot(cl.hier) 
 
