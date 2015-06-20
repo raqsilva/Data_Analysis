@@ -27,7 +27,6 @@ experimentData(eset) #nao tem informação
 abstract(eset) #nao tem informação
 
 
-
 ###2- Pre-processamento dos Dados ###
 #Não temos valores omissos nos dados em analise.
 sum(is.na(my_frame$GSM1446286_Can1.CEL))
@@ -84,8 +83,16 @@ require(Biobase)
 object<-new("ExpressionSet", exprs=as.matrix(new_frame2))# transformar o newframe2 em  expression set
 object
 tt = rowttests(object)#Realiza os t-tests e verificar os p-values
-
 tt
+
+
+## Obter nomes dos genes
+ob=featureNames(object)
+#biocLite("hugene10sttranscriptcluster.db")
+library(hugene10sttranscriptcluster.db)
+unlist(mget(ob, hugene10sttranscriptclusterSYMBOL))
+
+
 #Novo dataframe ordenado pela coluna de p value
 pvalueorder= tt[order(tt$p.value),]
 pvalueorder$p.value[1:20]# primeiros 20 resultados com menor p value
