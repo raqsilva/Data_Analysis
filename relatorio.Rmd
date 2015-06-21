@@ -186,6 +186,6 @@ unlist(mget(bb, hugene10sttranscriptclusterENTREZID))
 ```
 
 ## Discussão
-Como podemos ver através da imagem anterior, temos os genes 7976812 e 7976816 que são próximos e estão no mesmo cluster, com os IDs 767564 e 767579, respectivamente. Após uma pesquisa podemos reparar que ambos estão localizados aproximadamente na mesma região do cromossoma 14 e considerados _small nucleolar RNA_.
+Como podemos ver através da imagem anterior, temos os genes 7976812 e 7976816 que são próximos e estão no mesmo cluster, com os IDs 767564 e 767579, respectivamente. Após uma pesquisa podemos reparar que ambos estão localizados aproximadamente na mesma região do cromossoma 14 e considerados _small nucleolar RNA_. Além destes dois genes, temos 7965403 e 7965410 com os IDs 4060 e 1634, respectivamente. As proteínas codificadas estão envolvidas em alguns processos biológicos comuns às duas, os genes estão localizados aproximadamente na mesma região do cromossoma 12, devido a isto têm níveis de expressão muito próximos. Estes últimos genes codificam proteínas presentes no tecido conjuntivo, estando expressos maioritariamente no estroma
 
 
