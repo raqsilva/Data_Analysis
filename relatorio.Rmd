@@ -122,13 +122,30 @@ tt = rowttests(object)#Realiza os t-tests e verificar os p-values
 #Novo dataframe ordenado pela coluna de p value
 pvalueorder= tt[order(tt$p.value),]
 pvalueorder$p.value[1:20]# primeiros 20 resultados com menor p value
+library(hugene10sttranscriptcluster.db)
+rr=rownames(pvalueorder)[1:20]
+unlist(mget(rr, hugene10sttranscriptclusterENTREZID))
 
 ```
 
 
+## Informação dos genes
+De modo a obter informação sobre os genes, tivemos que proceder a uma pesquisa extensa, pois o annotation "pd.hugene.1.0.st.v1" não correspondia à base de dados, de modo a encontrar o nome da livraria correspondente (a base de dados). 
+
+```{r, message=FALSE, warning=FALSE}
+ob=featureNames(object)
+unlist(mget(ob, hugene10sttranscriptclusterSYMBOL))
+#unlist(mget(ob, hugene10sttranscriptclusterGENENAME))
+unlist(mget(ob, hugene10sttranscriptclusterENTREZID))
+
+```
+
+Nota: Uma grande parte dos genes não estão mapeados.
+
+
 ## Clustering
 Para visualizar genes que são próximos em termos de nível de expressão, iremos realizar um clustering (agrupamento) dos dados, caso os genes estejam próximos podem estar relacionados funcionalmente podendo, também, ter a mesma via metabólica.
-No primeiro cluster hierarquico temos 3 conjuntos de genes que são mais próximos.
+No primeiro cluster hierarquico temos 3 conjuntos de genes que são mais próximos, que neste caso se traduz numa proximidade relativa ao nível de expressão.
 
 ```{r, message=FALSE, warning=FALSE}
 eucD = dist(exprs(object[1:20])) 
@@ -149,7 +166,8 @@ heatmap(exprs(object[1:20]), labCol = F)
 ```
 
 
-O clustering k-means indica-nos o cluster onde cada gene está alojado.
+O clustering k-means indica-nos o cluster onde cada gene está alojado. É vantajoso caso quisermos encontrar grupos com vários elementos, mas também pode levar a um mau agrupamento, pois os outros elementos podem ser piores.
+
 ```{r, message=FALSE, warning=FALSE}
 #kmeans
 km = kmeans(exprs(object[1:20]), 3) 
@@ -157,6 +175,17 @@ names(km)
 km$cluster
 ```
 
+## Exemplo para genes com identificador 
 
+```{r, message=FALSE, warning=FALSE}
+eucD = dist(exprs(object[65:85])) 
+cl.hier <- hclust(eucD)
+plot(cl.hier) 
+bb=rownames(exprs(object[65:85]))
+unlist(mget(bb, hugene10sttranscriptclusterENTREZID))
+```
+
+## Discussão
+Como podemos ver através da imagem anterior, temos os genes 7976812 e 7976816 que são próximos e estão no mesmo cluster, com os IDs 767564 e 767579, respectivamente. Após uma pesquisa podemos reparar que ambos estão localizados aproximadamente na mesma região do cromossoma 14 e considerados _small nucleolar RNA_.
 
 

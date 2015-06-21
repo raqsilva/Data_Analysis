@@ -94,6 +94,8 @@ unlist(mget(ob, hugene10sttranscriptclusterSYMBOL))
 unlist(mget(ob, hugene10sttranscriptclusterGENENAME))
 unlist(mget(ob, hugene10sttranscriptclusterENTREZID))
 
+
+
 #Novo dataframe ordenado pela coluna de p value
 pvalueorder= tt[order(tt$p.value),]
 pvalueorder$p.value[1:20]# primeiros 20 resultados com menor p value
@@ -110,6 +112,8 @@ plot(cl.hier)
 bb=rownames(exprs(object[65:85]))
 unlist(mget(bb, hugene10sttranscriptclusterENTREZID))
 
+
+
 cl.hier <- hclust(eucD, method="single")
 plot(cl.hier)
 
@@ -122,6 +126,5 @@ heatmap(exprs(object[1:20]), labCol = F)
 km = kmeans(exprs(object[1:20]), 3) 
 names(km)
 km$cluster
-
 
 
